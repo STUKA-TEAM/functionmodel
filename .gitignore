@@ -1,19 +1,18 @@
-/*.project
+*.project
 
-/*.classpath
+*.classpath
 
-/.settings/*.container
+*.container
 
-/.settings/*.xml
+*.xml
 
-/.settings/*.name
+*.name
 
-/WebContent/META-INF/*.MF
+*.MF
 
-/.settings/*.component
+*.component
 
-/.settings/*.prefs
+*.prefs
 
-/.settings/*.jsdtscope
-
-/build/classes/example/*.class
+*.jsdtscope
+*.class
