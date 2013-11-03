@@ -37,16 +37,18 @@ public class ServletResponseForm extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		/**
-		 * NOTICE: ×Ö·û¼¯´¦Àí·Ç³£ÖØÒª£¬¶ÔÖĞÎÄµÄ´¦Àí±ØĞëÊ¹ÓÃUTF-8±àÂë
-		 *         1.tomcat·şÎñÆ÷ÅäÖÃÓÃUTF-8±àÂë£¨Õâ¸öÎÒÒÑ¾­ÔÚconf/server.xmlÅäÖÃ¹ıÁË£©
-		 *         2.servlet½ÓÊÕÇëÇóÓÃUTF-8±àÂë£º
-		 *         3.servlet»Ø¸´ÇëÇóÓÃUTF-8±àÂë£º
-		 *         4.mysqlÊı¾İ¿âÊ¹ÓÃUTF-8±àÂë£ºÔÚmysql clientÀïÉèÖÃ
+		 * NOTICE: å­—ç¬¦é›†å¤„ç†éå¸¸é‡è¦ï¼Œå¯¹ä¸­æ–‡çš„å¤„ç†å¿…é¡»ä½¿ç”¨UTF-8ç¼–ç 
+		 *         1.tomcatæœåŠ¡å™¨é…ç½®ç”¨UTF-8ç¼–ç ï¼ˆè¿™ä¸ªæˆ‘å·²ç»åœ¨conf/server.xmlé…ç½®è¿‡äº†ï¼‰
+		 *         2.servletæ¥æ”¶è¯·æ±‚ç”¨UTF-8ç¼–ç ï¼š
+		 *         3.servletå›å¤è¯·æ±‚ç”¨UTF-8ç¼–ç ï¼š
+		 *         4.mysqlæ•°æ®åº“ä½¿ç”¨UTF-8ç¼–ç ï¼šåœ¨mysql clienté‡Œè®¾ç½®
+		 *         5.eclipseé‡Œé¡¹ç›®ç¼–ç è®¾ç½®ä¸ºUTF-8ç¼–ç 
 		 *         
-		 *         ÕâÑù¾Í±£Ö¤
-		 *         A.webÒ³Ãæ²»»áÂÒÂë 
-		 *         B.ServletÀï´¦ÀíµÄÖĞÎÄ²»»áÂÒÂë
-		 *         C.´æÈëMySqlµÄÊı¾İ²»»áÂÒÂë
+		 *         è¿™æ ·å°±ä¿è¯
+		 *         A.webé¡µé¢ä¸ä¼šä¹±ç  
+		 *         B.Servleté‡Œå¤„ç†çš„ä¸­æ–‡ä¸ä¼šä¹±ç 
+		 *         C.å­˜å…¥MySqlçš„æ•°æ®ä¸ä¼šä¹±ç 
+		 *         D.javaä»£ç é‡Œæ±‰å­—ä¸ä¼šä¹±ç 
 		 */
 		request.setCharacterEncoding("UTF-8");
 		
@@ -56,9 +58,9 @@ public class ServletResponseForm extends HttpServlet {
 		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter printWriter = response.getWriter();
-		printWriter.print( "ÊÕµ½±íµ¥Êı¾İ£º"+"</br>"
-				            +"¿Í»§ĞÕÃû£º"+ name + "</br>" 
-				            +"¿Í»§µç»°£º" + tel
+		printWriter.print( "æ”¶åˆ°è¡¨å•æ•°æ®ï¼š"+"</br>"
+				            +"å®¢æˆ·å§“åï¼š"+ name + "</br>" 
+				            +"å®¢æˆ·ç”µè¯ï¼š" + tel
 				         );
 		
 		

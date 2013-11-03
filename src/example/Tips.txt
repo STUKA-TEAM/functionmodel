@@ -1,5 +1,5 @@
-1.ÅäÖÃºÃWTPºÍserverÖ®ºó¾Í¿ÉÒÔÖ±½ÓÖ´ÐÐservlet»òÕßÊÇhtmlÎÄ¼þÁË£¨ctrl + F11£©
-eclipse×öµÄ²Ù×÷¾ÍÊÇ½«ÏîÄ¿²¿Êðµ½serverÉÏ£¬È»ºóµ÷ÓÃä¯ÀÀÆ÷ÏÔÊ¾
-Ä¬ÈÏä¯ÀÀÆ÷¿ÉÒÔÔÚwindowÀïÃæÉèÖÃ£¬½¨Òéchrome
+1.é…ç½®å¥½WTPå’Œserverä¹‹åŽå°±å¯ä»¥ç›´æŽ¥æ‰§è¡Œservletæˆ–è€…æ˜¯htmlæ–‡ä»¶äº†ï¼ˆctrl + F11ï¼‰
+eclipseåšçš„æ“ä½œå°±æ˜¯å°†é¡¹ç›®éƒ¨ç½²åˆ°serverä¸Šï¼Œç„¶åŽè°ƒç”¨æµè§ˆå™¨æ˜¾ç¤º
+é»˜è®¤æµè§ˆå™¨å¯ä»¥åœ¨windowé‡Œé¢è®¾ç½®ï¼Œå»ºè®®chrome
 
-2.¿ÉÒÔÅäÖÃjavaËùÓÐ×Ö·ûÌáÊ¾
+2.å¯ä»¥é…ç½®javaæ‰€æœ‰å­—ç¬¦æç¤º
