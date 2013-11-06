@@ -15,7 +15,11 @@
 *.prefs
 
 *.jsdtscope
+
 *.class
+
+*.jar
+
 /build
 /build/classes
 /build/classes/example
