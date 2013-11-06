@@ -17,3 +17,5 @@
 *.jsdtscope
 *.class
 /build
+/build/classes
+/build/classes/example
