@@ -16,3 +16,4 @@
 
 *.jsdtscope
 *.class
+/build
