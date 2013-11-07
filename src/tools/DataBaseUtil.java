@@ -1,8 +1,15 @@
 package tools;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @Title: DataBaseUtil
@@ -39,30 +46,8 @@ public class DataBaseUtil {
         }
     }
 
-    /**
-     * @Title: init
-     * @Description: Initialization and return the instance of the database
-     * @param url
-     *            url to connect the database
-     * @param user
-     *            username of the database
-     * @param pwd
-     *            password of the database
-     * @date 2013年11月6日
-     */
-    public static DataBaseUtil init(String url, String user, String pwd) {
-        if (mDbList == null) {
-            mDbList = new DbList(mInstanceCnt);
-        }
-        if (mDbList.isFull()) {
-            return mDbList.getInstance();
-        } else {
-            DataBaseUtil dbUtil = new DataBaseUtil(url, user, pwd);
-            mDbList.push(dbUtil);
-            return dbUtil;
-        }
-    }
-
+   
+    
     /**
      * @Title: init
      * @Description: Initialization and return the instance of the database
@@ -70,8 +55,29 @@ public class DataBaseUtil {
      *            url to connect the database
      * @date 2013年11月6日
      */
-    public static DataBaseUtil init(String url) {
-        return init(url, Constant.gDbUserName, Constant.gDbPwd);
+    public static DataBaseUtil init() {
+    	Properties properties = new Properties();
+    	try {
+    		
+    		InputStream inputStream = DataBaseUtil.class.getResourceAsStream("./config.properties");
+			properties.load(inputStream);
+			
+			if (mDbList == null) {
+	            mDbList = new DbList(mInstanceCnt);
+	        }
+	        if (mDbList.isFull()) {
+	            return mDbList.getInstance();
+	        } else {
+	            DataBaseUtil dbUtil = new DataBaseUtil(properties.getProperty("databaseurl"), properties.getProperty("username"),  properties.getProperty("password"));
+	            mDbList.push(dbUtil);
+	            return dbUtil;
+	        }
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        return null;
     }
 
     /**
@@ -158,7 +164,7 @@ public class DataBaseUtil {
             mConn = DriverManager.getConnection(mUrl, mUser, mPwd);
             Statement statement = mConn.createStatement();
             res = statement.executeUpdate(sql);
-            mConn.commit();
+            
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -190,7 +196,7 @@ public class DataBaseUtil {
             Statement statement = mConn.createStatement();
             for (String sql : sqls)
                 res.add(statement.executeUpdate(sql));
-            mConn.commit();
+            
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
