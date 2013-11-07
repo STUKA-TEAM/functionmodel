@@ -54,7 +54,7 @@ public class ServletResponseForm extends HttpServlet {
 		
 		String name = request.getParameter("CustomerName");
 		String tel = request.getParameter("CustomerTel");
-		FormData formData = new FormData(name, tel);
+//		FormData formData = new FormData(name, tel);
 		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter printWriter = response.getWriter();
