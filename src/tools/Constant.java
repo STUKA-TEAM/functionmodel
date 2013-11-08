@@ -4,13 +4,10 @@ package tools;
  * @Title: Constant
  * @Description: define global constant
  * @Company: ZhongHe
- * @author dai
+ * @author dai, ben
  * @date 2013年11月5日
  */
 public final class Constant {
-	
-	
-	
 	/*image*/
 	public static final String IMAGE_ACTUAL_PATH = "./WebContent/images/";
 	public static final String IMAGE_ACCESS_PATH = "/images/";
