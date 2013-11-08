@@ -14,14 +14,14 @@ import tools.*;
 /**
  * Servlet implementation class SimpleServlet
  */
-@WebServlet("/SimpleServlet")
-public class SimpleServlet extends HttpServlet {
+@WebServlet("/SimpleSQLServlet")
+public class SimpleSQLServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public SimpleServlet() {
+    public SimpleSQLServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

@@ -23,3 +23,6 @@
 /build
 /build/classes
 /build/classes/example
+/*.properties
+
+/src/tools/*.properties
