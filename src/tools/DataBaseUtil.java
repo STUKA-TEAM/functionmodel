@@ -41,6 +41,8 @@ public class DataBaseUtil {
         }
     }
 
+   
+    
     /**
      * @Title: init
      * @Description: Initialization and return the instance of the database
@@ -167,7 +169,6 @@ public class DataBaseUtil {
             mConn = DriverManager.getConnection(mUrl, mUser, mPwd);
             Statement statement = mConn.createStatement();
             res = statement.executeUpdate(sql);
-
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -201,7 +202,6 @@ public class DataBaseUtil {
             Statement statement = mConn.createStatement();
             for (String sql : sqls)
                 res.add(statement.executeUpdate(sql));
-
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
