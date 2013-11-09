@@ -20,6 +20,12 @@
 
 *.jar
 
+*.jpeg
+
+*.jpg
+
+*.png
+
 /build
 /build/classes
 /build/classes/example
