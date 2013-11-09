@@ -1,8 +1,10 @@
 package tools;
 
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @Title: DataBaseUtil
@@ -44,34 +46,35 @@ public class DataBaseUtil {
      * @Description: Initialization and return the instance of the database
      * @param url
      *            url to connect the database
-     * @param user
-     *            username of the database
-     * @param pwd
-     *            password of the database
      * @date 2013年11月6日
      */
-    public static DataBaseUtil init(String url, String user, String pwd) {
-        if (mDbList == null) {
-            mDbList = new DbList(mInstanceCnt);
-        }
-        if (mDbList.isFull()) {
-            return mDbList.getInstance();
-        } else {
-            DataBaseUtil dbUtil = new DataBaseUtil(url, user, pwd);
-            mDbList.push(dbUtil);
-            return dbUtil;
-        }
-    }
+    public static DataBaseUtil init() {
+        Properties properties = new Properties();
+        try {
 
-    /**
-     * @Title: init
-     * @Description: Initialization and return the instance of the database
-     * @param url
-     *            url to connect the database
-     * @date 2013年11月6日
-     */
-    public static DataBaseUtil init(String url) {
-        return init(url, Constant.gDbUserName, Constant.gDbPwd);
+            InputStream inputStream = DataBaseUtil.class
+                    .getResourceAsStream("./config.properties");
+            properties.load(inputStream);
+
+            if (mDbList == null) {
+                mDbList = new DbList(mInstanceCnt);
+            }
+            if (mDbList.isFull()) {
+                return mDbList.getInstance();
+            } else {
+                DataBaseUtil dbUtil = new DataBaseUtil(
+                        properties.getProperty("databaseurl"),
+                        properties.getProperty("username"),
+                        properties.getProperty("password"));
+                mDbList.push(dbUtil);
+                return dbUtil;
+            }
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -91,7 +94,8 @@ public class DataBaseUtil {
      * @date 2013年11月6日
      */
     public ResultSet SqlQuery(String sql) {
-        if(mIsAlive) return null;
+        if (!mIsAlive)
+            return null;
         mIsAlive = false;
         ResultSet rs = null;
         try {
@@ -122,7 +126,8 @@ public class DataBaseUtil {
      * @date 2013年11月6日
      */
     public List<ResultSet> SqlQuery(String[] sqls) {
-        if(mIsAlive) return null;
+        if (!mIsAlive)
+            return null;
         mIsAlive = false;
         List<ResultSet> rs = new ArrayList<ResultSet>();
         try {
@@ -153,7 +158,8 @@ public class DataBaseUtil {
      * @date 2013年11月6日
      */
     public int SqlExec(String sql) {
-        if(mIsAlive) return -1;
+        if (!mIsAlive)
+            return -1;
         mIsAlive = false;
         int res = -1;
         try {
@@ -161,7 +167,7 @@ public class DataBaseUtil {
             mConn = DriverManager.getConnection(mUrl, mUser, mPwd);
             Statement statement = mConn.createStatement();
             res = statement.executeUpdate(sql);
-            mConn.commit();
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -185,7 +191,8 @@ public class DataBaseUtil {
      * @date 2013年11月6日
      */
     public List<Integer> SqlExec(String[] sqls) {
-        if(mIsAlive) return null;
+        if (!mIsAlive)
+            return null;
         mIsAlive = false;
         List<Integer> res = new ArrayList<Integer>();
         try {
@@ -194,7 +201,7 @@ public class DataBaseUtil {
             Statement statement = mConn.createStatement();
             for (String sql : sqls)
                 res.add(statement.executeUpdate(sql));
-            mConn.commit();
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
