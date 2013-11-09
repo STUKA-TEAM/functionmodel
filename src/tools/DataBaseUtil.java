@@ -91,6 +91,7 @@ public class DataBaseUtil {
      * @date 2013年11月6日
      */
     public ResultSet SqlQuery(String sql) {
+        if(mIsAlive) return null;
         mIsAlive = false;
         ResultSet rs = null;
         try {
@@ -121,6 +122,7 @@ public class DataBaseUtil {
      * @date 2013年11月6日
      */
     public List<ResultSet> SqlQuery(String[] sqls) {
+        if(mIsAlive) return null;
         mIsAlive = false;
         List<ResultSet> rs = new ArrayList<ResultSet>();
         try {
@@ -151,6 +153,7 @@ public class DataBaseUtil {
      * @date 2013年11月6日
      */
     public int SqlExec(String sql) {
+        if(mIsAlive) return -1;
         mIsAlive = false;
         int res = -1;
         try {
@@ -182,6 +185,7 @@ public class DataBaseUtil {
      * @date 2013年11月6日
      */
     public List<Integer> SqlExec(String[] sqls) {
+        if(mIsAlive) return null;
         mIsAlive = false;
         List<Integer> res = new ArrayList<Integer>();
         try {
