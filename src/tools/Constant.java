@@ -8,15 +8,16 @@ package tools;
  * @date 2013年11月5日
  */
 public final class Constant {
-    /* baidu LBS */
+	    /* baidu LBS */
     public static final String gLbsAk = "AE1f0f9ccf32d1bba22d2bc319cc68e5";
-    /* image */
-    public static final String IMAGE_ACTUAL_PATH = "./WebContent/images/";
-    public static final String IMAGE_ACCESS_PATH = "/images/";
-    public static final String IMAGE_TYPE_GIF = "gif";
-    public static final String IMAGE_TYPE_JPG = "jpg";
-    public static final String IMAGE_TYPE_JPEG = "jpeg";
-    public static final String IMAGE_TYPE_BMP = "bmp";
-    public static final String IMAGE_TYPE_PNG = "png";
-    public static final String IMAGE_TYPE_PSD = "psd"; // photoshop
+    
+	/*image*/
+	public static final String IMAGE_WINDOWS_PATH = "\\images\\";
+	public static final String IMAGE_NORMAL_PATH = "/images/";
+	public static final String IMAGE_TYPE_GIF = "gif";
+	public static final String IMAGE_TYPE_JPG = "jpg";
+	public static final String IMAGE_TYPE_JPEG = "jpeg";
+	public static final String IMAGE_TYPE_BMP = "bmp";  
+	public static final String IMAGE_TYPE_PNG = "png";
+    public static final String IMAGE_TYPE_PSD = "psd";   // photoshop
 }
