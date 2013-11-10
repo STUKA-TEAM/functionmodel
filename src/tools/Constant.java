@@ -9,8 +9,8 @@ package tools;
  */
 public final class Constant {
 	/*image*/
-	public static final String IMAGE_ACTUAL_PATH = "./WebContent/images/";
-	public static final String IMAGE_ACCESS_PATH = "/images/";
+	public static final String IMAGE_WINDOWS_PATH = "\\images\\";
+	public static final String IMAGE_NORMAL_PATH = "/images/";
 	public static final String IMAGE_TYPE_GIF = "gif";
 	public static final String IMAGE_TYPE_JPG = "jpg";
 	public static final String IMAGE_TYPE_JPEG = "jpeg";
