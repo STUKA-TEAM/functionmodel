@@ -18,7 +18,11 @@
 
 *.class
 
-*.jar
+*.jpeg
+
+*.jpg
+
+*.png
 
 /build
 /build/classes
@@ -26,3 +30,4 @@
 /*.properties
 
 /src/tools/*.properties
+/WebContent/images/*.jpeg
