@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Lottery information form</title>
+</head>
+<body>
+<form action="../NewLotteryActivityServlet" method="post" enctype="multipart/form-data">
+<p>抽奖活动名称: <input type="text" name="LotteryName" /></p>
+<p>插入背景图片: <input type="file" name="LotteryPicture" /></p>
+<input type="text" name="LotterySummary" placeholder="抽奖活动介绍">
+<p>发布时间: <input type="date" name="StartDate" /> ~ <input type="date" name="EndDate" /></p>
+<p><input type="submit" value="保存" /></p>
+</form>
+</body>
+</html>
