@@ -2,7 +2,7 @@ package lottery;
 
 /**
  * @Title: LotteryPrize
- * @Description:
+ * @Description: 奖品活动信息配置
  * @Company: ZhongHe
  * @author ben
  * @date 2013年11月11日

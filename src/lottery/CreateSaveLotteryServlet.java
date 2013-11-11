@@ -1,7 +1,6 @@
 package lottery;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,17 +21,21 @@ import tools.DataBaseUtil;
 import tools.ImageUtil;
 
 /**
- * Servlet implementation class NewLotteryActivityServlet
+ * @Title: CreateSaveLotteryServlet
+ * @Description: 商检创建新的抽奖活动并选择保存  
+ * @Company: ZhongHe
+ * @author ben
+ * @date 2013-11-11
  */
-@WebServlet("/NewLotteryActivityServlet")
+@WebServlet("/CreateSaveLotteryServlet")
 @MultipartConfig
-public class NewLotteryActivityServlet extends HttpServlet {
+public class CreateSaveLotteryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NewLotteryActivityServlet() {
+    public CreateSaveLotteryServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -51,13 +54,13 @@ public class NewLotteryActivityServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
 		
-		/*normal input*/
+		/**normal input*/
 		String lotteryName = request.getParameter("LotteryName");
 		String lotterySummary = request.getParameter("LotterySummary");
 		String startDate = request.getParameter("StartDate");
 		String endDate = request.getParameter("EndDate");
 		
-		/*file input*/
+		/**file input*/
 		Part lotteryPicture = request.getPart("LotteryPicture");
 		String picturePath = null;
 		if(lotteryPicture.getContentType().startsWith("image/")){
@@ -65,7 +68,7 @@ public class NewLotteryActivityServlet extends HttpServlet {
 		    picturePath = ImageUtil.scaleFill(lotteryPicture.getInputStream(), picturePath, 400, 400);
 		}	
 		
-		/*json input*/
+		/**json input*/
 		//simulate json input
 		LotteryPrize lp = new LotteryPrize("特等奖", "iphone5s 一部", 3, 0.0001);
 		LotteryPrize lp2 = new LotteryPrize("一等奖", "香港三日游旅游券1张", 30, 0.05);
@@ -81,7 +84,7 @@ public class NewLotteryActivityServlet extends HttpServlet {
 		List<LotteryPrize> lpList = gson.fromJson(json, new TypeToken<ArrayList
 				<LotteryPrize>>() {}.getType());		
 		
-		/*insert into database*/
+		/**insert into database*/
 		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
 		int lotteryId = dataBaseUtil.SqlExec("INSERT INTO lottery_activity"
 				+ " VALUES (default,'" + lotteryName + "','" + lotterySummary +
@@ -89,13 +92,12 @@ public class NewLotteryActivityServlet extends HttpServlet {
 		
 		for(int i = 0; i < lpList.size(); i ++){
 			LotteryPrize temp = lpList.get(i);
-			int Id = dataBaseUtil.SqlExec("INSERT INTO lottery_prize VALUES (default,'" 
+			dataBaseUtil.SqlExec("INSERT INTO lottery_prize VALUES (default,'" 
 		+ lotteryId + "','" + temp.getPrizeName() + "','" + temp.getPrizeContent()
 		+ "','" + temp.getLuckyNum() + "','" + temp.getLuckyPercent() + "')");
-			System.out.println(Id);
 		}
 		
-		response.setContentType("text/html; charset=UTF-8");
+/*		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter printWriter = response.getWriter();
 		printWriter.print( "收到表单数据："+"</br>"
 				            +"LotteryName："+ lotteryName + "</br>" 
@@ -104,7 +106,7 @@ public class NewLotteryActivityServlet extends HttpServlet {
 				            +"EndDate:" + endDate + "</br>"
 				            +"BackgroundPath:" + picturePath + "</br>"
 				            +"lotteryId:" + lotteryId + "</br>"
-				         );
+				         );*/
 	}
 
 }
