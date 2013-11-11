@@ -1,6 +1,7 @@
 package lottery;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,12 +89,13 @@ public class NewLotteryActivityServlet extends HttpServlet {
 		
 		for(int i = 0; i < lpList.size(); i ++){
 			LotteryPrize temp = lpList.get(i);
-			dataBaseUtil.SqlExec("INSERT INTO lottery_prize VALUES (default,'" 
+			int Id = dataBaseUtil.SqlExec("INSERT INTO lottery_prize VALUES (default,'" 
 		+ lotteryId + "','" + temp.getPrizeName() + "','" + temp.getPrizeContent()
 		+ "','" + temp.getLuckyNum() + "','" + temp.getLuckyPercent() + "')");
+			System.out.println(Id);
 		}
 		
-/*		response.setContentType("text/html; charset=UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter printWriter = response.getWriter();
 		printWriter.print( "收到表单数据："+"</br>"
 				            +"LotteryName："+ lotteryName + "</br>" 
@@ -101,7 +103,8 @@ public class NewLotteryActivityServlet extends HttpServlet {
 				            +"StartDate:" + startDate + "</br>"
 				            +"EndDate:" + endDate + "</br>"
 				            +"BackgroundPath:" + picturePath + "</br>"
-				         );*/
+				            +"lotteryId:" + lotteryId + "</br>"
+				         );
 	}
 
 }
