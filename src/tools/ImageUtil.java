@@ -1,16 +1,17 @@
 package tools;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
 
@@ -30,10 +31,11 @@ public class ImageUtil {
 	 * @Title: scaleRatio
 	 * @Description: 按比例缩放图像
 	 * @param srcImage 源图像输入流
+	 * @param serverPath 服务器上资源路径
 	 * @param scale 缩放比例 
 	 * @return String 最终图像存放地址
 	 */
-	public final static String scaleRatio(InputStream srcImage, double ratio){
+	public final static String scaleRatio(InputStream srcImage, String serverPath, double ratio){
 		String destImagePath = null;
 		try {
 			// 获取源图像长宽
@@ -50,11 +52,7 @@ public class ImageUtil {
 			BufferedImage img = drawPicture(width, height, image);
 			
 			// 保存新图像到动态生成地址，并设置用户访问路径
-            String destImageName = generateRandomImageName(
-            		Constant.IMAGE_TYPE_JPEG);
-			ImageIO.write(img, Constant.IMAGE_TYPE_JPEG, new File(
-					Constant.IMAGE_ACTUAL_PATH + destImageName));
-			destImagePath = Constant.IMAGE_ACCESS_PATH + destImageName;
+			destImagePath = saveNewImage(img, serverPath, Constant.IMAGE_TYPE_PNG);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -66,11 +64,12 @@ public class ImageUtil {
 	 * @Title: scaleCut
 	 * @Description: 按宽高缩放图像(裁剪法)
 	 * @param srcImage 源图像输入流
+	 * @param serverPath 服务器上资源路径
 	 * @param destHeight 目标图像高度
 	 * @param destWidth 目标图像宽度
 	 * @return String 最终图像存放地址
 	 */
-	public final static String scaleCut(InputStream srcImage, int destWidth, int destHeight){
+	public final static String scaleCut(InputStream srcImage, String serverPath, int destWidth, int destHeight){
 		String destImagePath = null;
 		try {
 			// 获取源图像长宽
@@ -102,11 +101,7 @@ public class ImageUtil {
 				transImg = drawPicture(transWidth - halfExcessWidth * 2, transHeight, image);
 
 				// 保存新图像到动态生成地址，并设置用户访问路径
-	            String destImageName = generateRandomImageName(
-	            		Constant.IMAGE_TYPE_JPEG);
-				ImageIO.write(transImg, Constant.IMAGE_TYPE_JPEG, new File(
-						Constant.IMAGE_ACTUAL_PATH + destImageName));
-				destImagePath = Constant.IMAGE_ACCESS_PATH + destImageName;
+				destImagePath = saveNewImage(transImg, serverPath, Constant.IMAGE_TYPE_PNG);
 			}
 			else { // 以宽为基准缩放
 				transWidth = destWidth;
@@ -128,11 +123,7 @@ public class ImageUtil {
 				transImg = drawPicture(transWidth, transHeight - halfExcessHeight * 2, image);
 				
 				// 保存新图像到动态生成地址，并设置用户访问路径
-	            String destImageName = generateRandomImageName(
-	            		Constant.IMAGE_TYPE_JPEG);
-				ImageIO.write(transImg, Constant.IMAGE_TYPE_JPEG, new File(
-						Constant.IMAGE_ACTUAL_PATH + destImageName));
-				destImagePath = Constant.IMAGE_ACCESS_PATH + destImageName;
+				destImagePath = saveNewImage(transImg, serverPath, Constant.IMAGE_TYPE_PNG);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -145,11 +136,12 @@ public class ImageUtil {
 	 * @Title: scaleFill
 	 * @Description: 按宽高缩放图像(填补空白法)
 	 * @param srcImage 源图像输入流
+	 * @param serverPath 服务器上资源路径
 	 * @param destWidth 目标图像宽度
 	 * @param destHeight 目标图像高度
 	 * @return String 最终图像存放地址
 	 */
-	public final static String scaleFill(InputStream srcImage, int destWidth, int destHeight){
+	public final static String scaleFill(InputStream srcImage, String serverPath, int destWidth, int destHeight){
 		String destImagePath = null;
 		try {
 			// 获取源图像长宽,定义最小缩放比率
@@ -167,25 +159,20 @@ public class ImageUtil {
 			BufferedImage img = new BufferedImage(destWidth, destHeight, 
 					BufferedImage.TYPE_INT_RGB);
 			Graphics2D gra = img.createGraphics();
-			gra.setColor(Color.white);
-			gra.fillRect(0, 0, destWidth, destHeight);
+			img = gra.getDeviceConfiguration().createCompatibleImage(destWidth, destHeight, 
+					Transparency.TRANSLUCENT);
+			gra.dispose();
+			gra = img.createGraphics();
             if (destWidth == image.getWidth(null))
                 gra.drawImage(image, 0, (destHeight - image.getHeight(null)) / 2,
-                        image.getWidth(null), image.getHeight(null),
-                        Color.white, null);
+                        image.getWidth(null), image.getHeight(null), null);
             else
                 gra.drawImage(image, (destWidth - image.getWidth(null)) / 2, 0,
-                        image.getWidth(null), image.getHeight(null),
-                        Color.white, null);
+                        image.getWidth(null), image.getHeight(null), null);
             gra.dispose();
 			
 			// 保存新图像到动态生成地址，并设置用户访问路径
-            String destImageName = generateRandomImageName(
-            		Constant.IMAGE_TYPE_JPEG);
-			ImageIO.write(img, Constant.IMAGE_TYPE_JPEG, new File(
-					Constant.IMAGE_ACTUAL_PATH + destImageName));
-			destImagePath = Constant.IMAGE_ACCESS_PATH + destImageName;
-            		
+			destImagePath = saveNewImage(img, serverPath, Constant.IMAGE_TYPE_PNG); 		
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -193,6 +180,24 @@ public class ImageUtil {
 		return destImagePath;	
 	}
 	
+	/**
+	 * @Title: getLength
+	 * @Description: detect the length of one sentence
+	 * @param text
+	 * @return int --the length
+	 */
+    public final static int getLength(String text) {
+        int length = 0;
+        for (int i = 0; i < text.length(); i++) {
+            if (new String(text.charAt(i) + "").getBytes().length > 1) {
+                length += 2;
+            } else {
+                length += 1;
+            }
+        }
+        return (int) Math.round(length / 2.0);
+    }
+    
 	/**
 	 * @Title: drawImage
 	 * @Description: draw image automatic
@@ -225,5 +230,29 @@ public class ImageUtil {
 		String randomImageName = current + String.format("%07d", random) + "." + imageType;
 		return randomImageName;
 	}
+	
+    /**
+     * @Title: saveNewImage
+     * @Description: save processed image and return its access path
+     * @param img
+     * @param rsPath --the path of resource in server
+     * @param imageType
+     * @return String
+     * @throws IOException
+     */
+	private static String saveNewImage(BufferedImage img, String rsPath, String imageType) throws IOException {
+		// TODO Auto-generated method stub
+		String imageName = generateRandomImageName(imageType);
+		if (OSUtil.isWindows()) {
+			ImageIO.write(img, imageType, new File(rsPath + Constant.IMAGE_WINDOWS_PATH
+					+ imageName));
+		}
+		else {
+			ImageIO.write(img, imageType, new File(rsPath + Constant.IMAGE_NORMAL_PATH
+					+ imageName));
+		}
+		return Constant.IMAGE_NORMAL_PATH + imageName;
+	}
+	
 }
 

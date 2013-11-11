@@ -30,3 +30,4 @@
 /*.properties
 
 /src/tools/*.properties
+/WebContent/images/*.jpeg

@@ -1,4 +1,4 @@
-﻿# Host: 127.0.0.1  (Version: 5.5.32)
+# Host: 127.0.0.1  (Version: 5.5.32)
 # Date: 2013-11-11 11:12:42
 # Generator: MySQL-Front 5.3  (Build 4.43)
 

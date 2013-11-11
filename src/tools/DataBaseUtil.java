@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 /**
@@ -95,7 +96,7 @@ public class DataBaseUtil {
      * @return ResultSet
      * @date 2013年11月6日
      */
-    public ResultSet SqlQuery(String sql) {
+    public ConnectionAndResultSet SqlQuery(String sql) {
         if (!mIsAlive)
             return null;
         mIsAlive = false;
@@ -109,48 +110,14 @@ public class DataBaseUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        try {
-            mConn.close();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+       
         mIsAlive = true;
-        return rs;
+        
+        ConnectionAndResultSet connectionAndResultSet = new ConnectionAndResultSet(mConn, rs);
+        return connectionAndResultSet;
     }
 
-    /**
-     * @Title: SqlQuery
-     * @Description: Execute the query sqls array
-     * @param sqls
-     *            sql array
-     * @return ResultSet
-     * @date 2013年11月6日
-     */
-    public List<ResultSet> SqlQuery(String[] sqls) {
-        if (!mIsAlive)
-            return null;
-        mIsAlive = false;
-        List<ResultSet> rs = new ArrayList<ResultSet>();
-        try {
-            // 建立到MySQL的连接
-            mConn = DriverManager.getConnection(mUrl, mUser, mPwd);
-            Statement statement = mConn.createStatement();
-            for (String sql : sqls)
-                rs.add(statement.executeQuery(sql));
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        try {
-            mConn.close();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        mIsAlive = true;
-        return rs;
-    }
+    
 
     /**
      * @Title: SqlQuery
@@ -168,7 +135,12 @@ public class DataBaseUtil {
             // 建立到MySQL的连接
             mConn = DriverManager.getConnection(mUrl, mUser, mPwd);
             Statement statement = mConn.createStatement();
-            res = statement.executeUpdate(sql);
+            statement.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = statement.getGeneratedKeys();   
+            if (rs.next()) {  
+                res = rs.getInt(1);   
+             
+            }  
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

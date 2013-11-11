@@ -34,7 +34,8 @@ public class SimpleSQLServlet extends HttpServlet {
 		printWriter.println("It works!!");
 		
 		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
-		dataBaseUtil.SqlExec("insert into song_shopsentence values(default,'yes')");
+		int id = dataBaseUtil.SqlExec("insert into song_shopsentence values(default,'yes')");
+		System.out.println(id);
 	}
 
 	/**
