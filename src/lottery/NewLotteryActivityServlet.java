@@ -60,7 +60,7 @@ public class NewLotteryActivityServlet extends HttpServlet {
 		/*file input*/
 		Part lotteryPicture = request.getPart("LotteryPicture");
 		String picturePath = null;
-		if(lotteryPicture != null){
+		if(lotteryPicture.getInputStream() != null){
 			picturePath = request.getSession().getServletContext().getRealPath("");
 		    picturePath = ImageUtil.scaleFill(lotteryPicture.getInputStream(), picturePath, 400, 400);
 		}
