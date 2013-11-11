@@ -80,8 +80,7 @@ public class NewLotteryActivityServlet extends HttpServlet {
 		//"luckyPercent":1.0E-4},{"prizeName":"一等奖","prizeContent":"香港三日游旅游券1张",
 		//"luckyNum":30,"luckyPercent":0.05}]
 		List<LotteryPrize> lpList = gson.fromJson(json, new TypeToken<ArrayList
-				<LotteryPrize>>() {}.getType());
-		System.out.println(lpList.size());
+				<LotteryPrize>>() {}.getType());		
 		
 /*		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter printWriter = response.getWriter();
@@ -93,10 +92,17 @@ public class NewLotteryActivityServlet extends HttpServlet {
 				            +"BackgroundPath:" + picturePath + "</br>"
 				         );*/
 		
-/*		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
-		dataBaseUtil.SqlExec("INSERT INTO lottery_activity"
+		/*insert into database*/
+		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
+		int lotteryId = dataBaseUtil.SqlExec("INSERT INTO lottery_activity"
 				+ " VALUES (default,'" + lotteryName + "','" + lotterySummary +
-				"','" + picturePath +"','"+ startDate + "','" + endDate +"',3,0)");*/
+				"','" + picturePath +"','"+ startDate + "','" + endDate +"',3,0)");
+		for(int i = 0; i < lpList.size(); i ++){
+			LotteryPrize temp = lpList.get(i);
+			dataBaseUtil.SqlExec("INSERT INTO lottery_prize VALUES (default,'" 
+		+ lotteryId + "','" + temp.getPrizeName() + "','" + temp.getPrizeContent()
+		+ "','" + temp.getLuckyNum() + "','" + temp.getLuckyPercent() + "')");
+		}
 	}
 
 }
