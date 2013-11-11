@@ -1,7 +1,6 @@
 package lottery;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,11 +59,10 @@ public class NewLotteryActivityServlet extends HttpServlet {
 		/*file input*/
 		Part lotteryPicture = request.getPart("LotteryPicture");
 		String picturePath = null;
-		if(lotteryPicture.getInputStream() != null){
+		if(lotteryPicture.getContentType().startsWith("image/")){
 			picturePath = request.getSession().getServletContext().getRealPath("");
 		    picturePath = ImageUtil.scaleFill(lotteryPicture.getInputStream(), picturePath, 400, 400);
-		}
-		
+		}	
 		
 		/*json input*/
 		//simulate json input
@@ -76,11 +74,24 @@ public class NewLotteryActivityServlet extends HttpServlet {
 		Gson gson = new Gson();
 		String json = gson.toJson(list);
 		//json styles 
-		//[{"prizeName":"特等奖","prizeContent":"iphone5s 一部","luckyNum":3,
-		//"luckyPercent":1.0E-4},{"prizeName":"一等奖","prizeContent":"香港三日游旅游券1张",
-		//"luckyNum":30,"luckyPercent":0.05}]
+		/*[{"prizeName":"特等奖","prizeContent":"iphone5s 一部","luckyNum":3,
+		  "luckyPercent":1.0E-4},{"prizeName":"一等奖","prizeContent":"香港三日游旅游券1张",
+		  "luckyNum":30,"luckyPercent":0.05}] */
 		List<LotteryPrize> lpList = gson.fromJson(json, new TypeToken<ArrayList
 				<LotteryPrize>>() {}.getType());		
+		
+		/*insert into database*/
+		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
+		int lotteryId = dataBaseUtil.SqlExec("INSERT INTO lottery_activity"
+				+ " VALUES (default,'" + lotteryName + "','" + lotterySummary +
+				"','" + picturePath +"','"+ startDate + "','" + endDate +"',3,0)");
+		
+		for(int i = 0; i < lpList.size(); i ++){
+			LotteryPrize temp = lpList.get(i);
+			dataBaseUtil.SqlExec("INSERT INTO lottery_prize VALUES (default,'" 
+		+ lotteryId + "','" + temp.getPrizeName() + "','" + temp.getPrizeContent()
+		+ "','" + temp.getLuckyNum() + "','" + temp.getLuckyPercent() + "')");
+		}
 		
 /*		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter printWriter = response.getWriter();
@@ -91,18 +102,6 @@ public class NewLotteryActivityServlet extends HttpServlet {
 				            +"EndDate:" + endDate + "</br>"
 				            +"BackgroundPath:" + picturePath + "</br>"
 				         );*/
-		
-		/*insert into database*/
-		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
-		int lotteryId = dataBaseUtil.SqlExec("INSERT INTO lottery_activity"
-				+ " VALUES (default,'" + lotteryName + "','" + lotterySummary +
-				"','" + picturePath +"','"+ startDate + "','" + endDate +"',3,0)");
-		for(int i = 0; i < lpList.size(); i ++){
-			LotteryPrize temp = lpList.get(i);
-			dataBaseUtil.SqlExec("INSERT INTO lottery_prize VALUES (default,'" 
-		+ lotteryId + "','" + temp.getPrizeName() + "','" + temp.getPrizeContent()
-		+ "','" + temp.getLuckyNum() + "','" + temp.getLuckyPercent() + "')");
-		}
 	}
 
 }
