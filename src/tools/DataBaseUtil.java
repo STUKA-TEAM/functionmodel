@@ -139,7 +139,7 @@ public class DataBaseUtil {
             ResultSet rs = statement.getGeneratedKeys();   
             if (rs.next()) {  
                 res = rs.getInt(1);   
-                return res;  
+             
             }  
         } catch (SQLException e) {
             // TODO Auto-generated catch block
