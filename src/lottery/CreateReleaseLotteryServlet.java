@@ -10,32 +10,30 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-
 import javax.servlet.http.Part;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import tools.DataBaseUtil;
 import tools.ImageUtil;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 /**
- * @Title: CreateSaveLotteryServlet
- * @Description: 商家创建新的抽奖活动并选择保存  
+ * @Title: CreateReleaseLotteryServlet
+ * @Description: 商家创建新的抽奖活动并选择发布  
  * @Company: ZhongHe
  * @author ben
  * @date 2013-11-11
  */
-@WebServlet("/CreateSaveLotteryServlet")
+@WebServlet("/CreateReleaseLotteryServlet")
 @MultipartConfig
-public class CreateSaveLotteryServlet extends HttpServlet {
+public class CreateReleaseLotteryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreateSaveLotteryServlet() {
+    public CreateReleaseLotteryServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -62,7 +60,7 @@ public class CreateSaveLotteryServlet extends HttpServlet {
 		String startDate = request.getParameter("StartDate") + " " + request.getParameter("StartTime");
 		String endDate = request.getParameter("EndDate") + " " + request.getParameter("EndTime");
 		int chanceNum = Integer.parseInt(request.getParameter("ChanceNum"));
-
+		
 		Part lotteryPicture = request.getPart("LotteryPicture");
 		String picturePath = null;
 		if(lotteryPicture.getContentType().startsWith("image/")){
@@ -80,7 +78,7 @@ public class CreateSaveLotteryServlet extends HttpServlet {
 		Gson gson = new Gson();
 		String json = gson.toJson(list);
 		//json styles 
-/*		[{"prizeName":"特等奖","prizeContent":"iphone5s 一部","luckyNum":3,
+		/*[{"prizeName":"特等奖","prizeContent":"iphone5s 一部","luckyNum":3,
 		  "luckyPercent":1.0E-4},{"prizeName":"一等奖","prizeContent":"香港三日游旅游券1张",
 		  "luckyNum":30,"luckyPercent":0.05}] */
 		List<LotteryPrize> lpList = gson.fromJson(json, new TypeToken<ArrayList
@@ -90,7 +88,7 @@ public class CreateSaveLotteryServlet extends HttpServlet {
 		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
 		int lotteryId = dataBaseUtil.SqlExec("INSERT INTO lottery_activity"
 				+ " VALUES (default,'" + lotteryName + "','" + lotterySummary +
-				"','" + picturePath +"','"+ startDate + "','" + endDate +"'," + chanceNum + ",0)");
+				"','" + picturePath +"','"+ startDate + "','" + endDate +"'," + chanceNum + ",1)");
 		
 		for(int i = 0; i < lpList.size(); i ++){
 			LotteryPrize temp = lpList.get(i);
@@ -98,7 +96,6 @@ public class CreateSaveLotteryServlet extends HttpServlet {
 		+ lotteryId + "','" + temp.getPrizeName() + "','" + temp.getPrizeContent()
 		+ "','" + temp.getLuckyNum() + "','" + temp.getLuckyPercent() + "')");
 		}
-		
 	}
 
 }

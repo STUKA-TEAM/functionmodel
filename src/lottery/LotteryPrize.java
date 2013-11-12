@@ -2,7 +2,7 @@ package lottery;
 
 /**
  * @Title: LotteryPrize
- * @Description: 奖品活动信息配置
+ * @Description: 奖品信息配置
  * @Company: ZhongHe
  * @author ben
  * @date 2013年11月11日
@@ -73,14 +73,4 @@ public class LotteryPrize {
 		this.luckyPercent = luckyPercent;
 	}	
 	
-/*	public static void main(String[] args){
-		LotteryPrize lp = new LotteryPrize("特等奖", "iphone5s 一部", 3, 0.0001);
-		LotteryPrize lp2 = new LotteryPrize("一等奖", "香港三日游旅游券1张", 30, 0.05);
-		List<LotteryPrize> list = new ArrayList<LotteryPrize>();
-		list.add(lp);
-		list.add(lp2);
-		Gson gson = new Gson();
-		String jsonRepresentation = gson.toJson(list);
-        System.out.println(jsonRepresentation);
-	}*/
 }

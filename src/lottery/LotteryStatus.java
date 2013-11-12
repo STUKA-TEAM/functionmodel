@@ -2,7 +2,7 @@ package lottery;
 
 /**
  * @Title: LotteryStatus
- * @Description: 商家查看抽奖活动状态信息
+ * @Description: 抽奖活动状态信息
  * @Company: ZhongHe
  * @author ben
  * @date 2013年11月11日
@@ -12,6 +12,15 @@ public class LotteryStatus {
 	private String lotteryName;
 	private int lotteryStatus;
 	
+	/**
+	 * @category constructor()
+	 */
+	public LotteryStatus(int lotteryId, String lotteryName, int lotteryStatus) {
+		// TODO Auto-generated constructor stub
+		this.lotteryId = lotteryId;
+		this.lotteryName = lotteryName;
+		this.lotteryStatus = lotteryStatus;
+	}
 	/**
 	 * @return the lotteryId
 	 */
@@ -48,4 +57,5 @@ public class LotteryStatus {
 	public void setLotteryStatus(int lotteryStatus) {
 		this.lotteryStatus = lotteryStatus;
 	}
+	
 }

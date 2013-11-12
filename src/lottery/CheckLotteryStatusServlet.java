@@ -42,19 +42,19 @@ public class CheckLotteryStatusServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		/**query from the database*/
+		/**query the database*/
 		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
-		ConnectionAndResultSet con = dataBaseUtil.SqlQuery("SELECT LotteryId, "
-				+ "LotteryName, LotteryStatus FROM lottery_activity");
+		ConnectionAndResultSet con = dataBaseUtil.SqlQuery("SELECT * FROM lottery_activity");
 		ResultSet result = con.getResultSet();
-		List<LotteryStatus> lsList = new ArrayList<LotteryStatus>();
+		List<LotteryInfo> liList = new ArrayList<LotteryInfo>();
 		try {
-			while (result.next()) {
-				LotteryStatus temp = new LotteryStatus();
-				temp.setLotteryId(result.getInt("LotteryId"));
-				temp.setLotteryName(result.getString("LotteryName"));
-				temp.setLotteryStatus(result.getInt("LotteryStatus"));
-				lsList.add(temp);
+			while (result.next()) {				
+				LotteryInfo temp = new LotteryInfo(result.getInt("LotteryId"), 
+						result.getString("LotteryName"), result.getString("LotterySummary"), 
+						result.getString("LotteryPicture"), result.getTimestamp("StartDate"),
+						result.getTimestamp("EndDate"), result.getInt("ChanceNum"),
+						result.getInt("LotteryStatus"), null);
+				liList.add(temp);
 			}
 			result.close();
 			con.getConnection().close();
@@ -62,12 +62,32 @@ public class CheckLotteryStatusServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		for(int i = 0; i < liList.size(); i ++){
+			LotteryInfo temp = liList.get(i);
+			con = dataBaseUtil.SqlQuery("SELECT * FROM lottery_prize WHERE LotteryId = " + temp.getLotteryId());
+			result = con.getResultSet();
+			List<LotteryPrize> lpList = new ArrayList<LotteryPrize>();
+			try {
+				while(result.next()){
+					LotteryPrize tp = new LotteryPrize(result.getString("PrizeName"), 
+							result.getString("PrizeContent"), result.getInt("LuckyNum"),
+							result.getDouble("LuckyPercent"));
+					lpList.add(tp);
+				}
+				result.close();
+				con.getConnection().close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			temp.setLpList(lpList);
+		}	
 		
 		/**list to json*/
 		Gson gson = new Gson();
-		String json = gson.toJson(lsList);
+		String json = gson.toJson(liList);
 		
-		/**response*/
+		/**response json*/
 		response.setContentType("application/json; charset=utf-8");
 		PrintWriter printWriter = response.getWriter();
 		printWriter.print(json);		
