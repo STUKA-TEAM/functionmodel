@@ -19,20 +19,20 @@ import tools.ConnectionAndResultSet;
 import tools.DataBaseUtil;
 
 /**
- * @Title: CheckLotteryStatusServlet
- * @Description: 商家查看数据库中所有抽奖活动的状态  
+ * @Title: GetLuckyRecordServlet
+ * @Description: 商家查看活动情况时获取当前剩余奖品信息  
  * @Company: ZhongHe
  * @author ben
- * @date 2013-11-11
+ * @date 2013-11-12
  */
-@WebServlet("/CheckLotteryStatusServlet")
-public class CheckLotteryStatusServlet extends HttpServlet {
+@WebServlet("/GetLuckyRecordServlet")
+public class GetLuckyRecordServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CheckLotteryStatusServlet() {
+    public GetLuckyRecordServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -42,19 +42,24 @@ public class CheckLotteryStatusServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("UTF-8");
+		
+		/**
+		 * 需要接收参数：LotteryId
+		 */
+		int lotteryId = Integer.parseInt(request.getParameter("LotteryId"));
+		
 		/**query the database*/
 		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
-		ConnectionAndResultSet con = dataBaseUtil.SqlQuery("SELECT * FROM lottery_activity");
+		ConnectionAndResultSet con = dataBaseUtil.SqlQuery("SELECT * FROM lottery_prize WHERE LotteryId = " + lotteryId);
 		ResultSet result = con.getResultSet();
-		List<LotteryInfo> liList = new ArrayList<LotteryInfo>();
+		List<PrizeInfo> lpList = new ArrayList<PrizeInfo>();
 		try {
-			while (result.next()) {				
-				LotteryInfo temp = new LotteryInfo(result.getInt("LotteryId"), 
-						result.getString("LotteryName"), result.getString("LotterySummary"), 
-						result.getString("LotteryPicture"), result.getTimestamp("StartDate"),
-						result.getTimestamp("EndDate"), result.getInt("ChanceNum"),
-						result.getInt("LotteryStatus"), null);
-				liList.add(temp);
+			while(result.next()){
+				PrizeInfo tp = new PrizeInfo(result.getInt("PrizeId"), result.getString("PrizeName"), 
+						result.getString("PrizeContent"), result.getInt("LuckyNum"),
+						result.getDouble("LuckyPercent"));
+				lpList.add(tp);
 			}
 			result.close();
 			con.getConnection().close();
@@ -62,17 +67,17 @@ public class CheckLotteryStatusServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for(int i = 0; i < liList.size(); i ++){
-			LotteryInfo temp = liList.get(i);
-			con = dataBaseUtil.SqlQuery("SELECT * FROM lottery_prize WHERE LotteryId = " + temp.getLotteryId());
+		
+		/**construct result model*/
+		List<LotteryStatus> lsList = new ArrayList<LotteryStatus>();
+		for (int i = 0; i < lpList.size(); i++) {
+			PrizeInfo temp = lpList.get(i);
+			int currentLuckyNum = 0;
+			con = dataBaseUtil.SqlQuery("SELECT * FROM lottery_lucky_record WHERE PrizeId = " + temp.getPrizeId());
 			result = con.getResultSet();
-			List<LotteryPrize> lpList = new ArrayList<LotteryPrize>();
 			try {
-				while(result.next()){
-					LotteryPrize tp = new LotteryPrize(result.getString("PrizeName"), 
-							result.getString("PrizeContent"), result.getInt("LuckyNum"),
-							result.getDouble("LuckyPercent"));
-					lpList.add(tp);
+				if(result.last()){
+					currentLuckyNum = result.getRow();   //计算一项奖品的剩余个数
 				}
 				result.close();
 				con.getConnection().close();
@@ -80,17 +85,17 @@ public class CheckLotteryStatusServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			temp.setLpList(lpList);
-		}	
+			lsList.add(new LotteryStatus(temp.getPrizeName(), currentLuckyNum));
+		}
 		
 		/**object to json*/
 		Gson gson = new Gson();
-		String json = gson.toJson(liList);
+		String json = gson.toJson(lsList);
 		
 		/**response json*/
 		response.setContentType("application/json; charset=utf-8");
 		PrintWriter printWriter = response.getWriter();
-		printWriter.print(json);		
+		printWriter.print(json);
 	}
 
 	/**

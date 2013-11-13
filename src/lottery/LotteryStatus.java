@@ -2,60 +2,49 @@ package lottery;
 
 /**
  * @Title: LotteryStatus
- * @Description: 抽奖活动状态信息
+ * @Description: 抽奖活动当前中奖人数信息
  * @Company: ZhongHe
  * @author ben
- * @date 2013年11月11日
+ * @date 2013年11月13日
  */
 public class LotteryStatus {
-	private int lotteryId;
-	private String lotteryName;
-	private int lotteryStatus;
+	private String prizeName;
+	private int currentLuckyNum;
 	
 	/**
 	 * @category constructor()
 	 */
-	public LotteryStatus(int lotteryId, String lotteryName, int lotteryStatus) {
+	public LotteryStatus(){
+		
+	}
+	public LotteryStatus(String prizeName, int currentLuckyNum) {
 		// TODO Auto-generated constructor stub
-		this.lotteryId = lotteryId;
-		this.lotteryName = lotteryName;
-		this.lotteryStatus = lotteryStatus;
+		this.setPrizeName(prizeName);
+		this.setCurrentLuckyNum(currentLuckyNum);
 	}
 	/**
-	 * @return the lotteryId
+	 * @return the prizeName
 	 */
-	public int getLotteryId() {
-		return lotteryId;
+	public String getPrizeName() {
+		return prizeName;
 	}
 	/**
-	 * @param lotteryId the lotteryId to set
+	 * @param prizeName the prizeName to set
 	 */
-	public void setLotteryId(int lotteryId) {
-		this.lotteryId = lotteryId;
+	public void setPrizeName(String prizeName) {
+		this.prizeName = prizeName;
 	}
 	/**
-	 * @return the lotteryName
+	 * @return the currentLuckyNum
 	 */
-	public String getLotteryName() {
-		return lotteryName;
+	public int getCurrentLuckyNum() {
+		return currentLuckyNum;
 	}
 	/**
-	 * @param lotteryName the lotteryName to set
+	 * @param currentLuckyNum the currentLuckyNum to set
 	 */
-	public void setLotteryName(String lotteryName) {
-		this.lotteryName = lotteryName;
-	}
-	/**
-	 * @return the lotteryStatus
-	 */
-	public int getLotteryStatus() {
-		return lotteryStatus;
-	}
-	/**
-	 * @param lotteryStatus the lotteryStatus to set
-	 */
-	public void setLotteryStatus(int lotteryStatus) {
-		this.lotteryStatus = lotteryStatus;
+	public void setCurrentLuckyNum(int currentLuckyNum) {
+		this.currentLuckyNum = currentLuckyNum;
 	}
 	
 }

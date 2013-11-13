@@ -24,6 +24,10 @@ public class LotteryInfo {
 	/**
 	 * @category constructor()
 	 */
+	public LotteryInfo(){
+		
+	}
+	
 	public LotteryInfo(int lotteryId, String lotteryName, String lotterySummary,
 			String lotteryPicture, Timestamp startDate, Timestamp endDate, int chanceNum, 
 			int lotteryStatus, List<LotteryPrize> prizeList){

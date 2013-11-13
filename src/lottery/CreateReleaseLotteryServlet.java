@@ -70,8 +70,8 @@ public class CreateReleaseLotteryServlet extends HttpServlet {
 		
 		/**json示范*/
 		//simulate json input and will be replaced
-		LotteryPrize lp = new LotteryPrize("特等奖", "iphone5s 一部", 3, 0.0001);
-		LotteryPrize lp2 = new LotteryPrize("一等奖", "香港三日游旅游券1张", 30, 0.05);
+		LotteryPrize lp = new LotteryPrize("特等奖", "iphone5s 一部", 3, 0.1);
+		LotteryPrize lp2 = new LotteryPrize("一等奖", "香港三日游旅游券1张", 30, 0.5);
 		List<LotteryPrize> list = new ArrayList<LotteryPrize>();
 		list.add(lp);
 		list.add(lp2);

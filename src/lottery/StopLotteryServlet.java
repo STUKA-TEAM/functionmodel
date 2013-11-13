@@ -15,20 +15,16 @@ import tools.ConnectionAndResultSet;
 import tools.DataBaseUtil;
 
 /**
- * @Title: ReleaseLotteryServlet
- * @Description: 直接发布抽奖活动 
- * @Company: ZhongHe
- * @author ben
- * @date 2013-11-12
+ * Servlet implementation class StopLotteryServlet
  */
-@WebServlet("/ReleaseLotteryServlet")
-public class ReleaseLotteryServlet extends HttpServlet {
+@WebServlet("/StopLotteryServlet")
+public class StopLotteryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ReleaseLotteryServlet() {
+    public StopLotteryServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,13 +34,6 @@ public class ReleaseLotteryServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
 		
 		/**
@@ -52,19 +41,19 @@ public class ReleaseLotteryServlet extends HttpServlet {
 		 */
 		int lotteryId = Integer.parseInt(request.getParameter("LotteryId"));
 	//	int lotteryId = 1;
-
+		
 		/**update the database*/
 		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
-		ConnectionAndResultSet con = dataBaseUtil.SqlQuery("SELECT EndDate, "
+		ConnectionAndResultSet con = dataBaseUtil.SqlQuery("SELECT StartDate, "
 				+ "LotteryStatus FROM lottery_activity WHERE LotteryId = " + lotteryId);
-		ResultSet result = con.getResultSet();
+		ResultSet result = con.getResultSet();  
 		try {
 			if(result.last()){
-				Timestamp endDate = result.getTimestamp("EndDate");
+				Timestamp startDate = result.getTimestamp("StartDate");
 				Timestamp currentDate = new Timestamp(System.currentTimeMillis());
 				int lotteryStatus = result.getInt("LotteryStatus");
-				if(endDate.after(currentDate) && lotteryStatus != 1){
-					dataBaseUtil.SqlExec("UPDATE lottery_activity SET LotteryStatus = 1, StartDate = '"
+				if(startDate.before(currentDate) && lotteryStatus != 2){
+					dataBaseUtil.SqlExec("UPDATE lottery_activity SET LotteryStatus = 2, EndDate = '"
 							+ currentDate + "' WHERE LotteryId = " + lotteryId);
 				}
 				else {
@@ -80,5 +69,14 @@ public class ReleaseLotteryServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+				
 	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
+
 }

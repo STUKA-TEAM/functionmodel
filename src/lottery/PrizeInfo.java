@@ -1,13 +1,14 @@
 package lottery;
 
 /**
- * @Title: LotteryPrize
- * @Description: 奖品信息配置，用于交互
+ * @Title: PrizeInfo
+ * @Description: 奖品信息配置，用于后台记录、查询
  * @Company: ZhongHe
  * @author ben
- * @date 2013年11月11日
+ * @date 2013年11月12日
  */
-public class LotteryPrize {
+public class PrizeInfo {
+	private int prizeId;
 	private String prizeName;
 	private String prizeContent;
 	private int luckyNum;
@@ -16,18 +17,30 @@ public class LotteryPrize {
 	/**
 	 * @category constructor()
 	 */
-	public LotteryPrize(){
+	public PrizeInfo(){
 		
 	}
 	
-	public LotteryPrize(String prizeName, String prizeContent, int luckyNum, 
+	public PrizeInfo(int prizeId, String prizeName, String prizeContent, int luckyNum, 
 			double luckyPercent){
+		this.prizeId = prizeId;
 		this.prizeName = prizeName;
 		this.prizeContent = prizeContent;
 		this.luckyNum = luckyNum;
 		this.luckyPercent = luckyPercent;
 	}
-	
+	/**
+	 * @return the prizeId
+	 */
+	public int getPrizeId() {
+		return prizeId;
+	}
+	/**
+	 * @param prizeId the prizeId to set
+	 */
+	public void setPrizeId(int prizeId) {
+		this.prizeId = prizeId;
+	}
 	/**
 	 * @return the prizeName
 	 */
@@ -37,8 +50,8 @@ public class LotteryPrize {
 	/**
 	 * @param prizeName the prizeName to set
 	 */
-	public void setPrizeName(String prizeNameString) {
-		this.prizeName = prizeNameString;
+	public void setPrizeName(String prizeName) {
+		this.prizeName = prizeName;
 	}
 	/**
 	 * @return the prizeContent
@@ -75,6 +88,5 @@ public class LotteryPrize {
 	 */
 	public void setLuckyPercent(double luckyPercent) {
 		this.luckyPercent = luckyPercent;
-	}	
-	
+	}
 }

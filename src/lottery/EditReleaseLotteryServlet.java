@@ -1,6 +1,9 @@
 package lottery;
 
+import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import tools.ConnectionAndResultSet;
 import tools.DataBaseUtil;
 import tools.ImageUtil;
 
@@ -55,8 +59,8 @@ public class EditReleaseLotteryServlet extends HttpServlet {
 		/**
 		 * 需要接受LotteryForm表单 + json奖项信息 + LotteryId
 		 */
-//		int lotteryId = request.getParameter("LotteryId");
-		int lotteryId = 1;
+		int lotteryId = Integer.parseInt(request.getParameter("LotteryId"));
+//	    int lotteryId = 1;
 		
 		String lotteryName = request.getParameter("LotteryName");
 		String lotterySummary = request.getParameter("LotterySummary");
@@ -70,6 +74,36 @@ public class EditReleaseLotteryServlet extends HttpServlet {
 			picturePath = request.getSession().getServletContext().getRealPath("");
 		    picturePath = ImageUtil.scaleFill(lotteryPicture.getInputStream(), picturePath, 400, 400);
 		}	
+		
+		/**查询并删除旧图片*/
+		String oldPath = null;
+		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
+		ConnectionAndResultSet con = dataBaseUtil.SqlQuery("SELECT LotteryPicture "
+				+ "FROM lottery_activity WHERE LotteryId = " + lotteryId);
+		ResultSet result = con.getResultSet();
+		try {
+			if(result.last()){
+				oldPath = result.getString("LotteryPicture");
+				if (oldPath.equalsIgnoreCase("null")) {  //translate
+					oldPath = null;
+				}
+			}
+			result.close();
+			con.getConnection().close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(oldPath != null){
+			oldPath = request.getSession().getServletContext().getRealPath("") + oldPath;
+			boolean flag = (new File(oldPath)).delete();
+			if (flag) {
+				System.out.println("old picture deleted!");
+			}
+			else {
+				System.out.println("delete the old picture failed!");
+			}
+		}
 		
 		/**json示范*/
 		//simulate json input and will be replaced
@@ -88,13 +122,28 @@ public class EditReleaseLotteryServlet extends HttpServlet {
 				<LotteryPrize>>() {}.getType());
 		
 		/**update records in the database
-		 * 更新activity表中数据，重写prize表中数据 
+		 * 更新activity表中数据,若没有则插入，重写prize表中数据 
 		 **/
-		DataBaseUtil dataBaseUtil = DataBaseUtil.init();
-		dataBaseUtil.SqlExec("UPDATE lottery_activity SET LotteryName = '" + 
-		lotteryName + "', LotterySummary = '" + lotterySummary + "', LotteryPicture = '" + 
-		picturePath + "', StartDate = '" + startDate + "', EndDate = '" + endDate + 
-		"', ChanceNum = " + chanceNum + ", LotteryStatus = 1 WHERE LotteryId = " + lotteryId);
+		con = dataBaseUtil.SqlQuery("SELECT * FROM lottery_activity WHERE LotteryId = " + lotteryId);
+		result = con.getResultSet();
+		try {
+			if (result.last()) {
+				dataBaseUtil.SqlExec("UPDATE lottery_activity SET LotteryName = '" + 
+						lotteryName + "', LotterySummary = '" + lotterySummary + "', LotteryPicture = '" + 
+						picturePath + "', StartDate = '" + startDate + "', EndDate = '" + endDate + 
+						"', ChanceNum = " + chanceNum + ", LotteryStatus = 1 WHERE LotteryId = " + lotteryId);
+			}
+			else {
+				dataBaseUtil.SqlExec("INSERT INTO lottery_activity"
+						+ " VALUES (" + lotteryId + ",'" + lotteryName + "','" + lotterySummary +
+						"','" + picturePath +"','"+ startDate + "','" + endDate +"'," + chanceNum + ",1)");
+			}
+			result.close();
+			con.getConnection().close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		dataBaseUtil.SqlExec("DELETE FROM lottery_prize WHERE LotteryId = " + lotteryId);
 		for(int i = 0; i < lpList.size(); i ++){
