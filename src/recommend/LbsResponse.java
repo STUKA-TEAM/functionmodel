@@ -13,6 +13,7 @@ public class LbsResponse {
     private int status;
     private String message;
     private String total;
+    @SuppressWarnings("rawtypes")
     private List results;
 
     /**
@@ -63,6 +64,7 @@ public class LbsResponse {
     /**
      * @return the results
      */
+    @SuppressWarnings("rawtypes")
     public List getResults() {
         return results;
     }
@@ -71,6 +73,7 @@ public class LbsResponse {
      * @param results
      *            the results to set
      */
+    @SuppressWarnings("rawtypes")
     public void setResults(List results) {
         this.results = results;
     }
