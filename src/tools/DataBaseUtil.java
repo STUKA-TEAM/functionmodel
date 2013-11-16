@@ -135,12 +135,14 @@ public class DataBaseUtil {
             // 建立到MySQL的连接
             mConn = DriverManager.getConnection(mUrl, mUser, mPwd);
             Statement statement = mConn.createStatement();
-            statement.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
+            int result = statement.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = statement.getGeneratedKeys();   
             if (rs.next()) {  
-                res = rs.getInt(1);   
-             
-            }  
+                res = rs.getInt(1);
+            }
+            else {
+				res = result;
+			}
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

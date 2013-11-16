@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Create Vote Form</title>
+</head>
+<body>
+<form action="../" method="post" enctype="multipart/form-data">
+<p>标题: <input type="text" name="VoteTitle" /></p>
+<p>概要: <input type="text" name="VoteSummary" placeholder="投票活动介绍"/></p>
+<p>背景图片：  <input type="file" name="VotePicture"/></p>
+<p>发布时间: <input type="date" name="StartDate" /> <input type="time" name="StartTime"> ~
+<input type="date" name="EndDate" /> <input type="time" name="EndTime"/></p>
+<p>单选/多选: <input type="radio" name="IsMultiChoice" value="no"> 单选          <input type="radio" name="IsMultiChoice" value="yes"> 多选 </p>
+<p>多选最大可选数: <input type="number" name="MaxChoice" /></p>
+<p>用户是否可留言: <input type="radio" name="EnableAdvice" value="no"/> 否       <input type="radio" name="EnableAdvice" value="yes"/> 是 </p>
+<p><input type="submit" value="保存" /></p>
+</form>
+</body>
+</html>

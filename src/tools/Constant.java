@@ -20,4 +20,12 @@ public final class Constant {
 	public static final String IMAGE_TYPE_BMP = "bmp";  
 	public static final String IMAGE_TYPE_PNG = "png";
     public static final String IMAGE_TYPE_PSD = "psd";   // photoshop
+    
+    /*activity status*/
+    public static final int ACTIVITY_DRAFT_STATUS = 1;
+    public static final int ACTIVITY_SAVE_STATUS = 2;
+    public static final int ACTIVITY_RELEASE_STATUS = 3;
+    public static final int ACTIVITY_CLOSED_STATUS = 4;
+    
+    /**/
 }

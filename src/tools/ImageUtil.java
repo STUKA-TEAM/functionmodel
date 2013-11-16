@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
@@ -224,10 +225,12 @@ public class ImageUtil {
 	 */
 	private static String generateRandomImageName(String imageType) {
 		// TODO Auto-generated method stub
-		long current = System.currentTimeMillis();
+		/**currentTime + randomNumber*/
+/*		long current = System.currentTimeMillis();
 		Random rand = new Random();
 		int random = rand.nextInt(10000000);
-		String randomImageName = current + String.format("%07d", random) + "." + imageType;
+		String randomImageName = current + String.format("%07d", random) + "." + imageType;*/
+		String randomImageName = UUID.randomUUID().toString().replace("-", "") + "." + imageType;
 		return randomImageName;
 	}
 	
