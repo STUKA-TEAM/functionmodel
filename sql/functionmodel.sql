@@ -1,5 +1,5 @@
 # Host: 127.0.0.1  (Version: 5.5.32)
-# Date: 2013-11-11 11:12:42
+# Date: 2013-11-16 18:04:05
 # Generator: MySQL-Front 5.3  (Build 4.43)
 
 /*!40101 SET NAMES utf8 */;
@@ -11,12 +11,12 @@
 DROP TABLE IF EXISTS `lottery_activity`;
 CREATE TABLE `lottery_activity` (
   `LotteryId` int(11) NOT NULL AUTO_INCREMENT COMMENT '抽奖活动ID',
-  `LotteryName` varchar(50) NOT NULL DEFAULT '' COMMENT '抽奖活动名称',
-  `LotterySummary` varchar(500) NOT NULL DEFAULT '' COMMENT '抽奖活动介绍',
+  `LotteryName` varchar(50) DEFAULT '' COMMENT '抽奖活动名称',
+  `LotterySummary` varchar(500) DEFAULT '' COMMENT '抽奖活动介绍',
   `LotteryPicture` varchar(100) DEFAULT NULL COMMENT '抽奖活动背景图片地址',
-  `StartDate` date NOT NULL DEFAULT '0000-00-00' COMMENT '抽奖活动起始日期',
-  `EndDate` date NOT NULL DEFAULT '0000-00-00' COMMENT '抽奖活动结束日期',
-  `ChanceNum` int(11) NOT NULL DEFAULT '0' COMMENT '最大抽奖次数',
+  `StartDate` timestamp NULL DEFAULT '0000-00-00 00:00:00' COMMENT '抽奖活动起始日期',
+  `EndDate` timestamp NULL DEFAULT '0000-00-00 00:00:00' COMMENT '抽奖活动结束日期',
+  `ChanceNum` int(11) DEFAULT '0' COMMENT '最大抽奖次数',
   `LotteryStatus` int(11) NOT NULL DEFAULT '0' COMMENT '抽奖活动状态，约束(0,1,2)',
   PRIMARY KEY (`LotteryId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -34,7 +34,7 @@ DROP TABLE IF EXISTS `lottery_lucky_record`;
 CREATE TABLE `lottery_lucky_record` (
   `LuckyId` int(11) NOT NULL AUTO_INCREMENT COMMENT '中奖记录ID',
   `PrizeId` int(11) NOT NULL DEFAULT '0' COMMENT '奖项ID',
-  `OpenId` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `OpenId` varchar(30) NOT NULL DEFAULT '0' COMMENT '用户ID',
   PRIMARY KEY (`LuckyId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -71,7 +71,7 @@ DROP TABLE IF EXISTS `lottery_record`;
 CREATE TABLE `lottery_record` (
   `RecordId` int(11) NOT NULL AUTO_INCREMENT COMMENT '抽奖记录ID',
   `LotteryId` int(11) NOT NULL DEFAULT '0' COMMENT '抽奖活动ID',
-  `OpenId` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `OpenId` varchar(30) NOT NULL DEFAULT '0' COMMENT '用户ID',
   `LotteryResult` int(11) NOT NULL DEFAULT '0' COMMENT '抽奖结果（是否中奖）约束：(0,1)',
   PRIMARY KEY (`RecordId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -233,13 +233,13 @@ CREATE TABLE `song_shopsentence` (
   `SentenceId` int(11) NOT NULL AUTO_INCREMENT,
   `Sentence` varchar(500) NOT NULL DEFAULT '' COMMENT '商户寄语',
   PRIMARY KEY (`SentenceId`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 #
 # Data for table "song_shopsentence"
 #
 
-INSERT INTO `song_shopsentence` VALUES (1,'yes'),(2,'yes'),(3,'yes'),(4,'yes');
+INSERT INTO `song_shopsentence` VALUES (1,'yes'),(2,'yes'),(3,'yes'),(4,'yes'),(5,'yes');
 
 #
 # Structure for table "song_styles"
@@ -265,14 +265,14 @@ INSERT INTO `song_styles` VALUES (1,'中国经典影视金曲'),(2,'华语歌坛
 DROP TABLE IF EXISTS `vote_activity`;
 CREATE TABLE `vote_activity` (
   `VoteId` int(11) NOT NULL AUTO_INCREMENT COMMENT '投票活动ID',
-  `VoteTitle` varchar(50) NOT NULL DEFAULT '' COMMENT '投票活动标题',
-  `VoteSummary` varchar(500) NOT NULL DEFAULT '' COMMENT '投票活动描述',
+  `VoteTitle` varchar(50) DEFAULT '' COMMENT '投票活动标题',
+  `VoteSummary` varchar(500) DEFAULT '' COMMENT '投票活动描述',
   `VotePicture` varchar(100) DEFAULT NULL COMMENT '投票活动背景图片地址',
-  `StartDate` date NOT NULL DEFAULT '0000-00-00' COMMENT '投票活动起始时间',
-  `EndDate` date NOT NULL DEFAULT '0000-00-00' COMMENT '投票活动结束时间',
-  `IsMultiChoice` int(11) NOT NULL DEFAULT '0' COMMENT '投票是否为多选类型，约束(0,1)',
-  `MaxChoice` int(11) NOT NULL DEFAULT '0' COMMENT '（如果为多选）最大选择数',
-  `EnableAdvice` int(11) NOT NULL DEFAULT '0' COMMENT '投票是否可留言，约束(0,1)',
+  `StartDate` timestamp NULL DEFAULT '0000-00-00 00:00:00' COMMENT '投票活动起始时间',
+  `EndDate` timestamp NULL DEFAULT '0000-00-00 00:00:00' COMMENT '投票活动结束时间',
+  `IsMultiChoice` int(11) DEFAULT '0' COMMENT '投票是否为多选类型，约束(0,1)',
+  `MaxChoice` int(11) DEFAULT '0' COMMENT '（如果为多选）最大选择数',
+  `EnableAdvice` int(11) DEFAULT '0' COMMENT '投票是否可留言，约束(0,1)',
   `VoteStatus` int(11) NOT NULL DEFAULT '0' COMMENT '投票活动状态，约束(0,1,2)',
   PRIMARY KEY (`VoteId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -290,7 +290,7 @@ DROP TABLE IF EXISTS `vote_advice`;
 CREATE TABLE `vote_advice` (
   `AdviceId` int(11) NOT NULL AUTO_INCREMENT COMMENT '留言ID',
   `VoteId` int(11) NOT NULL DEFAULT '0' COMMENT '投票活动ID',
-  `OpenId` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `OpenId` varchar(30) NOT NULL DEFAULT '0' COMMENT '用户ID',
   `AdviceContent` varchar(500) NOT NULL DEFAULT '' COMMENT '留言内容',
   PRIMARY KEY (`AdviceId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -326,7 +326,7 @@ DROP TABLE IF EXISTS `vote_item_choice`;
 CREATE TABLE `vote_item_choice` (
   `ChoiceId` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户选择ID',
   `ItemId` int(11) NOT NULL DEFAULT '0' COMMENT '投票选项ID',
-  `OpenId` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `OpenId` varchar(30) NOT NULL DEFAULT '0' COMMENT '用户ID',
   PRIMARY KEY (`ChoiceId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -345,8 +345,10 @@ CREATE TABLE `weather_city` (
   `UserOpenID` varchar(30) NOT NULL COMMENT '微信服务器返回的用户ID',
   `City` varchar(10) NOT NULL DEFAULT '' COMMENT '城市名',
   PRIMARY KEY (`RecordId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 #
 # Data for table "weather_city"
 #
+
+INSERT INTO `weather_city` VALUES (1,'1','上海'),(2,'1','北京');
